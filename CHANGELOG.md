@@ -14,16 +14,4 @@ None.
 
 ## [0.1.0]
 
-- Support adding extensions to the ["never type"](https://doc.rust-lang.org/std/primitive.never.html).
-
-### Breaking changes
-
-- Simplify names of traits generates for complex types.
-
-## [0.0.2]
-
-- Move "trybuild" to dev-dependency.
-
-## [0.0.1]
-
 Initial release.

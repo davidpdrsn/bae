@@ -1,4 +1,89 @@
-//! Coming soon
+//! `bae` is a crate for proc macro authors, which simplifies parsing of attributes. It is
+//! heavily inspired by [`darling`](https://crates.io/crates/darling) but has a significantly
+//! simpler API.
+//!
+//! ```rust
+//! use bae::FromAttributes;
+//!
+//! #[derive(
+//!     Debug,
+//!     Eq,
+//!     PartialEq,
+//!
+//!     // This will add a function called `from_attributes` with the signature
+//!     // `&[syn::Attribute] -> Result<MyAttr, syn::Error>`
+//!     FromAttributes,
+//! )]
+//! pub struct MyAttr {
+//!     // Anything that implements `syn::parse::Parse` is supported.
+//!     mandatory_type: syn::Type,
+//!     mandatory_ident: syn::Ident,
+//!
+//!     // Fields wrapped in `Option` are optional and default to `None` if
+//!     // not specified in the attribute.
+//!     optional_missing: Option<syn::Type>,
+//!     optional_given: Option<syn::Type>,
+//!
+//!     // A "switch" is something that doesn't take arguments.
+//!     // All fields with type `Option<()>` are considered swiches.
+//!     // They default to `None`.
+//!     switch: Option<()>,
+//! }
+//!
+//! // `MyAttr` is now equipped to parse attributes named `my_attr`. For example:
+//! //
+//! //     #[my_attr(
+//! //         switch,
+//! //         mandatory_ident = foo,
+//! //         mandatory_type = SomeType,
+//! //         optional_given = OtherType,
+//! //     )]
+//! //     struct Foo {
+//! //         ...
+//! //     }
+//!
+//! // the input and output type would normally be `proc_macro::TokenStream` but those
+//! // types cannot be used outside the compiler itself.
+//! fn my_proc_macro(input: proc_macro2::TokenStream) -> proc_macro2::TokenStream {
+//!     let item_struct = syn::parse2::<syn::ItemStruct>(input).unwrap();
+//!
+//!     let my_attr = MyAttr::from_attributes(&item_struct.attrs).unwrap();
+//!
+//!     assert_eq!(
+//!         my_attr.mandatory_type,
+//!         syn::parse_str::<syn::Type>("SomeType").unwrap()
+//!     );
+//!
+//!     assert_eq!(my_attr.optional_missing, None);
+//!
+//!     assert_eq!(
+//!         my_attr.optional_given,
+//!         Some(syn::parse_str::<syn::Type>("OtherType").unwrap())
+//!     );
+//!
+//!     assert_eq!(my_attr.mandatory_ident, syn::parse_str::<syn::Ident>("foo").unwrap());
+//!
+//!     assert_eq!(my_attr.switch.is_some(), true);
+//!
+//!     // ...
+//!     #
+//!     # quote::quote! {}
+//! }
+//! #
+//! # fn main() {
+//! #     let code = quote::quote! {
+//! #         #[other_random_attr]
+//! #         #[my_attr(
+//! #             switch,
+//! #             mandatory_ident = foo,
+//! #             mandatory_type = SomeType,
+//! #             optional_given = OtherType,
+//! #         )]
+//! #         struct Foo;
+//! #     };
+//! #     my_proc_macro(code);
+//! # }
+//! ```
 
 #![doc(html_root_url = "https://docs.rs/bae/0.0.1")]
 #![allow(clippy::let_and_return)]
@@ -18,6 +103,7 @@ use proc_macro_error::*;
 use quote::*;
 use syn::{spanned::Spanned, *};
 
+/// See root module docs for more info.
 #[proc_macro_derive(FromAttributes, attributes())]
 #[proc_macro_error]
 pub fn from_attributes(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
