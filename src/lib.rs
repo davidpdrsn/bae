@@ -85,14 +85,15 @@
 //! # }
 //! ```
 
-#![doc(html_root_url = "https://docs.rs/bae/0.1.0")]
+#![doc(html_root_url = "https://docs.rs/bae/0.1.2")]
 #![allow(clippy::let_and_return)]
 #![deny(
     unused_variables,
     mutable_borrow_reservation_conflict,
     dead_code,
     unused_must_use,
-    unused_imports
+    unused_imports,
+    missing_docs
 )]
 
 extern crate proc_macro;
