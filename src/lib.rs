@@ -1,4 +1,6 @@
-// #![doc(html_root_url = "https://docs.rs/bae/0.0.1")]
+//! Coming soon
+
+#![doc(html_root_url = "https://docs.rs/bae/0.0.1")]
 #![allow(clippy::let_and_return)]
 #![deny(
     unused_variables,
