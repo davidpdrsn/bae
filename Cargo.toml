@@ -12,14 +12,14 @@ repository = "https://github.com/davidpdrsn/bae.git"
 version = "0.1.2"
 
 [dependencies]
-syn = { version = "1.0", features = ["full", "extra-traits"] }
-quote = "1.0"
-proc-macro2 = "1.0"
+syn = { version = "1", features = ["full", "extra-traits"] }
+quote = "1"
+proc-macro2 = "1"
 proc-macro-error = "0.4"
 heck = "0.3"
 
 [dev_dependencies]
-trybuild = "1.0.23"
+trybuild = "1"
 
 [lib]
 proc-macro = true
