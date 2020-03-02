@@ -12,6 +12,10 @@ None.
 
 None.
 
+## [0.1.3]
+
+- Make version requirements for dependencies less strict.
+
 ## [0.1.2]
 
 Make docs.rs rebuild.
