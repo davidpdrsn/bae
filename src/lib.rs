@@ -174,8 +174,23 @@ impl FromAttributes {
                     } else {
                         let full_span = attrs
                             .iter()
-                            .fold(attrs[0].span(), |acc, attr| acc.join(attr.span()).unwrap());
-                        Err(syn::Error::new(full_span, &format!("missing attribute `#[{}]`", #attr_name)))
+                            .fold(
+                                Some(attrs[0].span()),
+                                |acc, attr| {
+                                    acc.and_then(|acc| {
+                                        acc.join(attr.span())
+                                    })
+                                }
+                            );
+
+                        if let Some(full_span) = full_span {
+                            Err(syn::Error::new(full_span, &format!("missing attribute `#[{}]`", #attr_name)))
+                        } else {
+                            Err(syn::Error::new(
+                                proc_macro2::Span::call_site(),
+                                &format!("missing attribute `#[{}]`", #attr_name),
+                            ))
+                        }
                     }
                 }
             }
