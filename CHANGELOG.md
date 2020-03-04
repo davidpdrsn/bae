@@ -6,7 +6,7 @@ for Rust libraries in [RFC #1105](https://github.com/rust-lang/rfcs/blob/master/
 
 ## Unreleased
 
-None.
+- Fix potential panic caused by unwrapping a `None`. The panic could happen while computing the span for an error message if not compiling on nightly.
 
 ### Breaking changes
 
