@@ -85,7 +85,7 @@
 //! # }
 //! ```
 
-#![doc(html_root_url = "https://docs.rs/bae/0.1.4")]
+#![doc(html_root_url = "https://docs.rs/bae/0.1.5")]
 #![allow(clippy::let_and_return)]
 #![deny(
     unused_variables,

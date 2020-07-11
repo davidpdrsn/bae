@@ -6,11 +6,15 @@ for Rust libraries in [RFC #1105](https://github.com/rust-lang/rfcs/blob/master/
 
 ## Unreleased
 
-- Use correct keywords used in Cargo.toml
+None.
 
 ### Breaking changes
 
 None.
+
+## 0.1.5
+
+- Use correct keywords used in Cargo.toml
 
 ## 0.1.4
 

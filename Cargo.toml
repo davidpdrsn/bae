@@ -10,7 +10,7 @@ license = "MIT"
 name = "bae"
 readme = "README.md"
 repository = "https://github.com/davidpdrsn/bae.git"
-version = "0.1.4"
+version = "0.1.5"
 
 [dependencies]
 syn = { version = "1", features = ["full", "extra-traits"] }
