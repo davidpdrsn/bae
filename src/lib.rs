@@ -10,8 +10,14 @@
 //!     Eq,
 //!     PartialEq,
 //!
-//!     // This will add a function called `from_attributes` with the signature
-//!     // `&[syn::Attribute] -> Result<MyAttr, syn::Error>`
+//!     // This will add two functions:
+//!     // ```
+//!     // fn from_attributes(attrs: &[syn::Attribute]) -> Result<MyAttr, syn::Error>
+//!     // fn try_from_attributes(attrs: &[syn::Attribute]) -> Result<Option<MyAttr>, syn::Error>
+//!     // ```
+//!     //
+//!     // `try_from_attributes` returns `Ok(None)` if the attribute is missing, `Ok(Some(_))` if
+//!     // its there and is valid, `Err(_)` otherwise.
 //!     FromAttributes,
 //! )]
 //! pub struct MyAttr {
@@ -153,44 +159,30 @@ impl FromAttributes {
 
         let code = quote! {
             impl #struct_name {
-                pub fn from_attributes(attrs: &[syn::Attribute]) -> syn::Result<Self> {
+                pub fn try_from_attributes(attrs: &[syn::Attribute]) -> syn::Result<Option<Self>> {
                     use syn::spanned::Spanned;
 
                     for attr in attrs {
                         match attr.path.get_ident() {
                             Some(ident) if ident == #attr_name => {
-                                return syn::parse2::<Self>(attr.tokens.clone());
+                                return Some(syn::parse2::<Self>(attr.tokens.clone())).transpose()
                             }
                             // Ignore other attributes
                             _ => {},
                         }
                     }
 
-                    if attrs.is_empty() {
+                    Ok(None)
+                }
+
+                pub fn from_attributes(attrs: &[syn::Attribute]) -> syn::Result<Self> {
+                    if let Some(attr) = Self::try_from_attributes(attrs)? {
+                        Ok(attr)
+                    } else {
                         Err(syn::Error::new(
                             proc_macro2::Span::call_site(),
                             &format!("missing attribute `#[{}]`", #attr_name),
                         ))
-                    } else {
-                        let full_span = attrs
-                            .iter()
-                            .fold(
-                                Some(attrs[0].span()),
-                                |acc, attr| {
-                                    acc.and_then(|acc| {
-                                        acc.join(attr.span())
-                                    })
-                                }
-                            );
-
-                        if let Some(full_span) = full_span {
-                            Err(syn::Error::new(full_span, &format!("missing attribute `#[{}]`", #attr_name)))
-                        } else {
-                            Err(syn::Error::new(
-                                proc_macro2::Span::call_site(),
-                                &format!("missing attribute `#[{}]`", #attr_name),
-                            ))
-                        }
                     }
                 }
             }

@@ -6,7 +6,7 @@ for Rust libraries in [RFC #1105](https://github.com/rust-lang/rfcs/blob/master/
 
 ## Unreleased
 
-None.
+- Also generate `try_from_attributes` which can be used to parse optional attributes.
 
 ### Breaking changes
 
