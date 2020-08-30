@@ -6,11 +6,15 @@ for Rust libraries in [RFC #1105](https://github.com/rust-lang/rfcs/blob/master/
 
 ## Unreleased
 
-- Also generate `try_from_attributes` which can be used to parse optional attributes.
+None.
 
 ### Breaking changes
 
 None.
+
+## 0.1.6
+
+- Also generate `try_from_attributes` which can be used to parse optional attributes.
 
 ## 0.1.5
 
