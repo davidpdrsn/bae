@@ -91,7 +91,7 @@
 //! # }
 //! ```
 
-#![doc(html_root_url = "https://docs.rs/bae/0.1.6")]
+#![doc(html_root_url = "https://docs.rs/bae/0.1.7")]
 #![allow(clippy::let_and_return)]
 #![deny(
     unused_variables,

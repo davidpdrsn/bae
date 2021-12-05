@@ -12,6 +12,10 @@ None.
 
 None.
 
+## 0.1.7
+
+- Update dependencies.
+
 ## 0.1.6
 
 - Also generate `try_from_attributes` which can be used to parse optional attributes.
