@@ -328,38 +328,23 @@ fn field_is_switch(field: &Field) -> bool {
 }
 
 fn inner_type(ty: &Type) -> Option<&Type> {
-    let type_path = if let Type::Path(type_path) = ty {
-        type_path
-    } else {
-        return None;
-    };
+    if let Type::Path(type_path) = ty {
+        let ty_args = &type_path
+            .path
+            .segments
+            .last()
+            .unwrap_or_else(|| abort!(ty.span(), "Empty type path"))
+            .arguments;
 
-    let ty_args = &type_path
-        .path
-        .segments
-        .last()
-        .unwrap_or_else(|| abort!(ty.span(), "Empty type path"))
-        .arguments;
-
-    let ty_args = if let PathArguments::AngleBracketed(ty_args) = ty_args {
-        ty_args
-    } else {
-        return None;
-    };
-
-    let generic_arg = if let Some(generic_arg) = ty_args.args.last() {
-        generic_arg
-    } else {
-        return None;
-    };
-
-    let ty = if let GenericArgument::Type(ty) = generic_arg {
-        ty
-    } else {
-        return None;
-    };
-
-    Some(ty)
+        if let PathArguments::AngleBracketed(ty_args) = ty_args {
+            if let Some(generic_arg) = ty_args.args.last() {
+                if let GenericArgument::Type(ty) = generic_arg {
+                    return Some(ty);
+                }
+            }
+        }
+    }
+    None
 }
 
 #[cfg(test)]
