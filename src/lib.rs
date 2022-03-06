@@ -347,10 +347,11 @@ fn inner_type(ty: &Type) -> Option<&Type> {
         return None;
     };
 
-    let generic_arg = &ty_args
-        .args
-        .last()
-        .unwrap_or_else(|| abort!(ty_args.span(), "Empty generic argument"));
+    let generic_arg = if let Some(generic_arg) = ty_args.args.last() {
+        generic_arg
+    } else {
+        return None;
+    };
 
     let ty = if let GenericArgument::Type(ty) = generic_arg {
         ty
