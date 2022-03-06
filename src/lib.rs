@@ -1,6 +1,14 @@
 //! `bae` is a crate for proc macro authors, which simplifies parsing of attributes. It is
-//! heavily inspired by [`darling`](https://crates.io/crates/darling) but has a significantly
+//! heavily inspired by [`darling`] but has a significantly
 //! simpler API.
+//!
+//! Instead of a new trait like
+//! [`darling::FromMeta`](https://docs.rs/darling/latest/darling/trait.FromMeta.html), bae uses
+//! [`syn::parse::Parse`] directly. For example, string and integer literals are expressed as
+//! [`struct@syn::LitStr`] and [`struct@syn::LitInt`], instead of [`String`] and [`u32`] like in
+//! [`darling`].
+//!
+//! [`darling`]: https://crates.io/crates/darling
 //!
 //! ```rust
 //! use bae::FromAttributes;
